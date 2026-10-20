@@ -9,9 +9,10 @@ export async function createServerSupabaseClient() {
 
   const cookieStore = await cookies();
 
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    anonKey!,
     {
       cookies: {
         getAll() {
@@ -32,7 +33,7 @@ export async function createServerSupabaseClient() {
 }
 
 export function createAdminClient() {
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY;
   if (!isSupabaseConfigured() || !serviceKey || serviceKey.includes("...")) {
     return null;
   }
